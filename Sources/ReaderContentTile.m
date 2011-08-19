@@ -51,21 +51,7 @@
 
 		self.levelsOfDetailBias = LEVELS_OF_DETAIL_BIAS;
 
-		UIScreen *mainScreen = [UIScreen mainScreen]; // Screen
-
-		CGFloat screenScale = [mainScreen scale]; // Screen scale
-
-		CGRect screenBounds = [mainScreen bounds]; // Screen bounds
-
-		CGFloat w_pixels = (screenBounds.size.width * screenScale);
-
-		CGFloat h_pixels = (screenBounds.size.height * screenScale);
-
-		CGFloat max = (w_pixels < h_pixels) ? h_pixels : w_pixels;
-
-		CGFloat sizeOfTiles = (max < 512.0f) ? 512.0f : 1024.0f;
-
-		self.tileSize = CGSizeMake(sizeOfTiles, sizeOfTiles);
+        self.tileSize = CGSizeMake(1724.0f, 1424.0f);
 	}
 
 	return self;
