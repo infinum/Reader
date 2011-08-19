@@ -19,7 +19,7 @@
 
 #pragma mark Constants
 
-#define LEVELS_OF_DETAIL 4
+#define LEVELS_OF_DETAIL 1
 #define LEVELS_OF_DETAIL_BIAS 3
 
 #pragma mark Properties
@@ -34,7 +34,7 @@
 	NSLog(@"%s", __FUNCTION__);
 #endif
 
-	return 0.0; // No fading wanted
+	return 0.25; // Set to 0.0 to disable fade
 }
 
 #pragma mark ReaderContentTile instance methods
