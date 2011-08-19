@@ -232,7 +232,8 @@
 
 			CGContextConcatCTM(context, CGPDFPageGetDrawingTransform(drawPDFPageRef, kCGPDFCropBox, self.bounds, 0, true));
 		}
-
+        CGContextSetInterpolationQuality(context, kCGInterpolationHigh); 
+        CGContextSetRenderingIntent(context, kCGRenderingIntentDefault);
 		CGContextDrawPDFPage(context, drawPDFPageRef);
 	}
 
