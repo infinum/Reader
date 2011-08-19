@@ -19,7 +19,7 @@
 @implementation ReaderViewController
 
 #pragma mark Constants
-
+#define DEBUGX 1
 #define PAGING_VIEWS 3
 
 #define TOOLBAR_HEIGHT 44.0f
@@ -98,7 +98,16 @@
 			{
 				contentView.frame = viewRect; [unusedViews removeObjectForKey:key];
 			}
-
+            if (number==maxValue && maxValue!=page && maxValue==(page+1)) { //preloading tweak, preload only next page
+                viewRect.origin.x = viewRect.size.width;
+                contentView.frame = viewRect;
+                contentView.alpha = 0.01;
+                [UIView beginAnimations:nil context:nil];
+                [UIView setAnimationDuration:0.25];
+                viewRect.origin.x += viewRect.size.width;
+                contentView.frame = viewRect;
+                [UIView commitAnimations];
+            }
 			viewRect.origin.x += viewRect.size.width;
 		}
 
@@ -159,6 +168,20 @@
 	document.lastOpen = [NSDate date]; // Update last opened date
 
 	isVisible = YES; // iOS present modal WTF bodge
+}
+
+-(void)prepareNextPage{
+    // ensuer page is in right position an not animating (needed because of preloading tweak)
+    NSNumber *key = [NSNumber numberWithInteger:currentPage+1]; // # key
+    ReaderContentView *contentView = [contentViews objectForKey:key];
+    if (contentView != nil && currentPage!=[document.pageCount integerValue] && currentPage!=1){
+        [contentView.layer removeAllAnimations];
+        CGRect viewRect = CGRectZero; viewRect.size = theScrollView.bounds.size;
+        viewRect.origin.x = 2*viewRect.size.width;
+        contentView.frame = viewRect;
+        contentView.alpha = 1.0;
+        
+    }
 }
 
 #pragma mark UIViewController methods
@@ -444,6 +467,10 @@
 
 #pragma mark UIScrollViewDelegate methods
 
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    [self prepareNextPage];
+}
+
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
 #ifdef DEBUGX
@@ -559,6 +586,7 @@
 
 		if ((maxPage > minPage) && (page != maxPage))
 		{
+            [self prepareNextPage];
 			CGPoint contentOffset = theScrollView.contentOffset;
 
 			contentOffset.x += theScrollView.bounds.size.width; // += 1
@@ -810,7 +838,10 @@
 #ifdef DEBUGX
 	NSLog(@"%s", __FUNCTION__);
 #endif
-
+    if (page==currentPage+1) {
+        [self prepareNextPage];
+    }
+    
 	[self showDocumentPage:page]; // Show page
 }
 
