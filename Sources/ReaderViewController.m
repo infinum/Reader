@@ -19,7 +19,7 @@
 @implementation ReaderViewController
 
 #pragma mark Constants
-#define DEBUGX 1
+
 #define PAGING_VIEWS 3
 
 #define TOOLBAR_HEIGHT 44.0f
@@ -171,6 +171,9 @@
 }
 
 -(void)prepareNextPage{
+#ifdef DEBUGX
+	NSLog(@"%s", __FUNCTION__);
+#endif
     // ensuer page is in right position an not animating (needed because of preloading tweak)
     NSNumber *key = [NSNumber numberWithInteger:currentPage+1]; // # key
     ReaderContentView *contentView = [contentViews objectForKey:key];
